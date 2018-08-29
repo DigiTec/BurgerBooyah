@@ -1,0 +1,496 @@
+/* Global game settings */
+* { -ms-touch-action: none; }
+
+HTML { width: 100%; height: 100%; display: table; text-align: center; overflow: hidden; }
+BODY { width: 100%; height: 100%; display: table-cell; vertical-align: middle; overflow: hidden; }
+
+/* Setup the viewport */
+#aspectRatioHost
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1366px;
+    height: 768px;
+
+    -ms-transform-origin: 0px 0px;
+
+    transform: scale(0.23);
+    -webkit-transform: scale(0.23);
+    -ms-transform: scale(0.23);
+}
+
+
+/* Setup the aspect ratio host */
+@media (min-width: 480px) and (min-height: 270px)
+{
+    #aspectRatioHost
+    {
+        transform: scale(0.35);
+        -webkit-transform: scale(0.35);
+        -ms-transform: scale(0.35);
+    }
+}
+@media (min-width: 800px) and (min-height: 450px)
+{
+    #aspectRatioHost
+    {
+        transform: scale(0.58);
+        -webkit-transform: scale(0.58);
+        -ms-transform: scale(0.58);
+    }
+}
+@media (min-width: 1024px) and (min-height: 575px)
+{
+    #aspectRatioHost
+    {
+        transform: scale(0.74);
+        -webkit-transform: scale(0.74);
+        -ms-transform: scale(0.74);
+    }
+}
+@media (min-width: 1152px) and (min-height: 647px)
+{
+    #aspectRatioHost
+    {
+        transform: scale(0.84);
+        -webkit-transform: scale(0.84);
+        -ms-transform: scale(0.84);
+    }
+}
+@media (min-width: 1280px) and (min-height: 720px)
+{
+    #aspectRatioHost
+    {
+        transform: scale(0.93);
+        -webkit-transform: scale(0.93);
+        -ms-transform: scale(0.93);
+    }
+}
+
+/* Screen Manager */ 
+#screenHost
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1366px;
+    height: 768px;
+    overflow: hidden;
+}
+
+.uiScreen 
+{
+    display:none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1366px;
+    height: 768px;
+
+}
+.uiScreen.visible
+{
+    display:block;
+}
+
+.backButton
+{
+    position: absolute;
+    display: table;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-family: "Wingdings";
+    
+    text-align: center;
+    border: 5px solid white;
+    border-radius: 30px;
+    
+    cursor: pointer;
+}
+.backButton::after
+{
+    display:table-cell;
+    content: "\df";
+    vertical-align: middle;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+/* Settings Screen */
+#settingsScreen
+{
+    background: url("../images/restaurant-background.png") 0px 0px no-repeat white;
+}
+#settingsAudio
+{
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    width: 400px;
+    height; 300px;
+}
+.settingsOption
+{
+    margin-bottom: 5px;
+    display: table;
+    width: 100%;
+}
+.settingsLabel
+{
+    display: table-cell;
+    text-align: left;
+}
+.settingsValue
+{
+    display: table-cell;
+    text-align: right;
+}
+
+/* Credits Screen */
+#creditsScreen
+{
+    background: url("../images/restaurant-background.png") 0px 0px no-repeat white;
+}
+
+.creditBio
+{
+    display: none;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+.creditBio.visible
+{
+    display: inline-block;
+}
+
+.creditColumn
+{
+}
+
+.settingsCategory, .creditCategory
+{
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 15px;
+    
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.settingsHeader, .creditHeader
+{
+    font-weight: bold;
+    font-size: 14pt;
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+.creditName
+{
+    margin-bottom: 5px;
+}
+.creditName:nth-child(3n)
+{
+    text-align: right;
+}
+.creditName:nth-child(3n+1)
+{
+    text-align: left;
+}
+.creditName:nth-child(3n+2)
+{
+    text-align: center;
+}
+
+/* Start Screen */ 
+#startScreen
+{
+    background-color: white;
+}
+#SplashImg
+{
+}
+
+#menuContainer
+{
+    display: table;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+#splashImageContainer
+{
+    display: table-cell;
+    vertical-align: center;
+}
+#menuButtonContainer
+{
+    display: table-cell;
+    vertical-align: top;
+}
+#menuButtonContainer IMG
+{
+    display:block;
+    margin-top: 30px;
+}
+#menuRow
+{
+    display: table-row;
+}
+
+/* Play Screen */
+#playScreen
+{
+    background: url("../images/restaurant-background.png") 0px -300px no-repeat beige;
+    background: url("../images/restaurant-background.png") 0px -300px no-repeat,
+                linear-gradient(to bottom, #FFFFFF 50%, #77621E 100%);
+}
+
+.customerEntity 
+{
+    position: absolute;
+    width: 280px;
+    height: 250px;
+    left: 0px;
+    top: 0px;
+}
+
+.customerHead
+{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    left: 60px;
+    top: -95px;
+}
+.customerHead.boy
+{
+    background: url("../images/character_heads_boy.png") -450px 0px no-repeat;
+}
+.customerEntity.angry .customerHead.boy
+{
+    background: url("../images/character_heads_boy.png") -150px 0px no-repeat;
+}
+.customerEntity.annoyed .customerHead.boy
+{
+    background: url("../images/character_heads_boy.png") 0px 0px no-repeat;
+}
+.customerEntity.satisfied .customerHead.boy
+{
+    background: url("../images/character_heads_boy.png") -750px 0px no-repeat;
+}
+.customerEntity.leaving .customerHead.boy
+{
+    background: url("../images/character_heads_boy.png") -600px 0px no-repeat;
+}
+.burgerOrderContainer 
+{
+    width: 128px;
+    height: 128px;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    background-color: #5E99FF;
+    background-image: radial-gradient(ellipse farthest-corner at center, white 0%, #5E99FF 100%);
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+.customerEntity.annoyed .burgerOrderContainer
+{
+    background-color: yellow;
+    background-image: radial-gradient(ellipse farthest-corner at center, white 0%, yellow 100%);
+}
+
+.customerEntity.angry .burgerOrderContainer
+{
+    background-color: tomato;
+    background-image: radial-gradient(ellipse farthest-corner at center, white 0%, tomato 100%);
+}
+
+#playerLivesContainer
+{
+    position: absolute;
+    display: table;
+
+    top: 20px;
+    left: 1246px;
+    width: 100px;
+    height: 50px;
+}
+
+#playerLives
+{
+    display: table-cell;
+
+    padding-right: 15px;
+
+    text-align: right;
+    vertical-align: middle;
+
+    font-size: 24pt;
+    font-weight: bold;
+    color: black;
+    
+    background: url("../images/icon_lives.png") 10px 0px no-repeat white;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+#playerLevelContainer
+{
+    position: absolute;
+    display: table;
+
+    top: 20px;
+    left: 480px;
+    width: 406px;
+    height: 50px;
+}
+
+#playerLevel
+{
+    display: table-cell;
+
+    text-align: center;
+    vertical-align: middle;
+
+    font-size: 24pt;
+    font-weight: bold;
+    color: black;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+#playerScoreContainer
+{
+    position: absolute;
+    display: table;
+
+    top: 20px;
+    left: 20px;
+    width: 220px;
+    height: 50px;
+}
+
+#playerScore
+{
+    display: table-cell;
+
+    padding-right: 15px;
+    
+    text-align: right;
+    vertical-align: middle;
+
+    font-size: 24pt;
+    font-style: italic;    
+    font-weight: bold;
+    color: goldenrod;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+#playerBurgerContainer
+{
+    position: absolute;
+    top: 500px;
+    left: 400px;
+    width: 220px;
+    height: 220px;
+    
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+#playerBurger
+{
+    position: absolute;
+    left: 80px;
+    top: 0px;
+    width: 60px;
+    height: 200px;
+}
+
+#playerTrash
+{
+    position: absolute;
+    top: 550px;
+    left: 0px;
+    width: 220px;
+    height: 220px;
+    background: url("../images/trash.png") no-repeat;
+}
+
+.ingredient
+{
+    position: absolute;
+    width: 160px;
+    height: 100px;
+}
+
+#ingredientBunBottom
+{
+    top: 608px;
+    left: 680px;
+    background: 
+        url("../images/bun_bottom.png") 10px 55px no-repeat,
+        url("../images/bun_bottom.png") 30px 40px no-repeat,
+        url("../images/bun_bottom.png") 45px 60px no-repeat;
+}
+
+#ingredientBunTop
+{
+    top: 468px;
+    left: 680px;
+    background: 
+        url("../images/bun_top.png") 10px 55px no-repeat,
+        url("../images/bun_top.png") 30px 40px no-repeat,
+        url("../images/bun_top.png") 45px 60px no-repeat;
+}
+
+#ingredientLettuce
+{
+    top: 608px;
+    left: 880px;
+    background: 
+        url("../images/lettuce.png") 10px 55px no-repeat,
+        url("../images/lettuce.png") 30px 40px no-repeat,
+        url("../images/lettuce.png") 45px 60px no-repeat;
+}
+
+#ingredientPatty
+{
+    top: 468px;
+    left: 880px;
+    background: 
+        url("../images/patty.png") 10px 55px no-repeat,
+        url("../images/patty.png") 30px 40px no-repeat,
+        url("../images/patty.png") 45px 60px no-repeat;
+}
+
+#ingredientBunMiddle
+{
+    top: 608px;
+    left: 1080px;
+    background: 
+        url("../images/bun_middle.png") 10px 55px no-repeat,
+        url("../images/bun_middle.png") 30px 40px no-repeat,
+        url("../images/bun_middle.png") 45px 60px no-repeat;
+}
+
+#ingredientCheese
+{
+    top: 468px;
+    left: 1080px;
+    background: 
+        url("../images/cheese.png") 10px 55px no-repeat,
+        url("../images/cheese.png") 30px 40px no-repeat,
+        url("../images/cheese.png") 45px 60px no-repeat;
+}

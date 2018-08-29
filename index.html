@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Burger Booyah</title>
+        <link href="css/default.css" rel="Stylesheet" />
+        <link href="css/PopupManager.css" rel="Stylesheet" />
+
+
+        <!-- Screen Transition effect -->
+        <script type="text/javascript" src="js/ScreenManager.js"></script>
+
+        <!-- Dialog Support -->
+        <script type="text/javascript" src="js/PopupManager.js"></script>
+
+        <!-- Sound Support -->
+        <script type="text/javascript" src="js/SoundManager.js"></script>
+
+        <!-- Burger Support -->
+        <script type="text/javascript" src="js/BurgerBuilder.js"></script>
+
+        <!-- Playing Screen -->
+        <script type="text/javascript" src="js/PlayScreen.js"></script>
+        <script type="text/javascript" src="js/GameEngine.js"></script>
+        <script type="text/javascript" src="js/CustomerEntity.js"></script>
+
+        <script>
+            var _lastPaintBeatTime;
+
+            function Initialize() {
+                PopupManager.setupPopups("popupUI", "popupWindow");
+                SoundManager.setupAudio("soundManager", "audioSingles", "audioInstances");
+                SoundManager.play("intro");
+
+                ScreenManager.setupScreens("screenHost", "uiScreen", "visible");
+                ScreenManager.transitionToScreen("startScreen");
+
+                if (!window.requestAnimationFrame) {
+                    window.requestAnimationFrame = function (f) { window.setTimeout(f, 16); }
+                }
+
+                _lastPaintBeatTime = Date.now();
+                window.requestAnimationFrame(OnPaintBeat);
+            }
+
+            function OnPaintBeat(timestamp) {
+                if ( timestamp === undefined ) {
+                    timestamp = (new Date()).getTime();
+                }
+
+                if (ScreenManager.currentScreen && ScreenManager.currentScreen.instance) {
+                    ScreenManager.currentScreen.instance.update(timestamp - _lastPaintBeatTime);
+                }
+
+                _lastPaintBeatTime = timestamp;
+
+                window.requestAnimationFrame(OnPaintBeat);
+            }
+
+            function Settings() {
+                SoundManager.play("buttonSettings");
+
+                var selectMusic = document.getElementById("settingMusicVolume");
+                var selectSfx = document.getElementById("settingSfxVolume");
+                var checkInstancing = document.getElementById("settingSoundInstancing");
+
+                MapVolumeToSelect(SoundManager.volumeMusic, selectMusic);
+                MapVolumeToSelect(SoundManager.volumeSoundEffects, selectSfx);
+                checkInstancing.checked = SoundManager.soundInstancing;
+
+                ScreenManager.transitionToScreen("settingsScreen", SwipeTransition.bind(new SwipeAnimationOptions()));
+            }
+
+            function Play() {
+                SoundManager.play("buttonPlay");
+
+                var playScreenId = "playScreen";
+                var playElement = document.getElementById(playScreenId);
+                playElement.instance = new PlayScreen(playElement);
+                ScreenManager.transitionToScreen(playScreenId, SwipeTransition.bind(new SwipeAnimationOptions()));
+            }
+
+            function Credits() {
+                SoundManager.play("buttonCredits");
+
+                ScreenManager.transitionToScreen("creditsScreen", SwipeTransition.bind(new SwipeAnimationOptions()));
+            }
+
+            function MainMenu() {
+                SoundManager.play("buttonMainMenu");
+
+                ScreenManager.transitionToScreen("startScreen", SwipeTransition.bind(new SwipeAnimationOptions(undefined, SwipeAnimationOptions.SWIPEDIRECTION_LEFT)));
+            }
+
+            function MapVolumeToSelect(soundLevel, targetElement) {
+                if ( soundLevel > 0.8 ) {
+                    targetElement.selectedIndex = 0;
+                }
+                else if ( soundLevel > 0.5 ) {
+                    targetElement.selectedIndex = 1;
+                }
+                else if ( soundLevel > 0 ) {
+                    targetElement.selectedIndex = 2;
+                }
+                else {
+                    targetElement.selectedIndex = 3;
+                }
+            }
+
+            function UpdateVolume(targetElement) {
+                var volumeLevel = parseFloat(targetElement[targetElement.selectedIndex].value);
+                switch (targetElement.id) {
+                    case "settingMusicVolume":
+                        SoundManager.volumeMusic = volumeLevel;
+                        break;
+                    case "settingSfxVolume":
+                        SoundManager.volumeSoundEffects = volumeLevel;
+                        break;
+                }
+            }
+
+            function UpdateCheck(targetElement) {
+                SoundManager.soundInstancing = targetElement.checked;
+            }
+
+            function NatfurBio(show) {
+                SoundManager.stopAll();
+
+                var bioImage = document.getElementById("natfurBioImage");
+                if (show) {
+                    bioImage.className = "creditBio visible";
+                    SoundManager.play("natfurBio");
+                }
+                else {
+                    bioImage.className = "creditBio";
+                }
+            }
+        </script>
+    </head>
+    <body onload="Initialize();">
+    	<div id="aspectRatioHost">
+			<div id="screenHost">
+				<!-- Start screen -->
+				<div class="uiScreen" id="startScreen">
+					<div style="display: table; text-align: center; width: 100%; height: 100%;">
+						<div style="display: table-cell; vertical-align: middle; text-align: center;">
+							<div id="menuContainer">
+								<div id="menuRow">
+									<div id="splashImgContainer">
+										<img id="SplashImg" src="images\TitleScreen.png">
+									</div>
+									<div id="menuButtonContainer">
+										<img id="playButton" src="images\button_play.png" onclick="Play();">
+										<img id="settingsButton" src="images\button_settings.png" onclick="Settings();">
+										<img id="creditsButton" src="images\button_credits.png" onclick="Credits();">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Play screen -->
+				<div class="uiScreen" id="playScreen">
+					<div id="ingredientsHolder">
+						<div id="playerScoreContainer">
+							<div id="playerScore"></div>
+						</div>
+						<div id="playerLevelContainer">
+							<div id="playerLevel"></div>
+						</div>
+						<div id="playerLivesContainer">
+							<div id="playerLives"></div>
+						</div>
+						<div id="playerTrash"></div>
+						<div id="playerBurgerContainer">
+							<div id="playerBurger"></div>
+						</div>
+						<div class="ingredient" id="ingredientBunBottom"></div>
+						<div class="ingredient" id="ingredientBunMiddle"></div>
+						<div class="ingredient" id="ingredientBunTop"></div>
+						<div class="ingredient" id="ingredientPatty"></div>
+						<div class="ingredient" id="ingredientLettuce"></div>
+						<div class="ingredient" id="ingredientCheese"></div>
+					</div>
+				</div>
+
+				<!-- Settings screen -->
+				<div class="uiScreen" id="settingsScreen">
+					<div id="settingsBackButton" class="backButton" onclick="MainMenu();"></div>
+					<div id="settingsHolder">
+						<div id="settingsAudio" class="settingsCategory">
+							<div class="settingsHeader">Audio:</div>
+							<div class="settingsOption">
+								<div class="settingsLabel">Sfx Volume:</div>
+								<div class="settingsValue">
+									<select id="settingSfxVolume" onchange="UpdateVolume(this)">
+										<option value="1.0">Loudest</option>
+										<option value="0.8">Loud</option>
+										<option value="0.5">Normal</option>
+										<option value="0">Off</option>
+									</select>
+								</div>
+							</div>
+							<div class="settingsOption">
+								<div class="settingsLabel">Music Volume:</div>
+								<div class="settingsValue">
+									<select id="settingMusicVolume" onchange="UpdateVolume(this)">
+										<option value="1.0">Loudest</option>
+										<option value="0.8">Loud</option>
+										<option value="0.5">Normal</option>
+										<option value="0">Off</option>
+									</select>
+								</div>
+							</div>
+							<div class="settingsOption">
+								<div class="settingsLabel">Use Sound Instancing:</div>
+								<div class="settingsValue">
+									<input type="checkbox" id="settingSoundInstancing" onchange="UpdateCheck(this)">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Credits screen -->
+				<div class="uiScreen" id="creditsScreen">
+					<div id="creditsBackButton" class="backButton" onclick="MainMenu();"></div>
+					<table width="100%" height="100%" border=0>
+						<tr>
+							<td width="40%" valign="middle" align="center"><img class="creditBio" id="natfurBioImage" src="images/natfur_leaks.jpg"></td>
+							<td class="creditColumn">
+								<div class="creditCategory">
+									<div class="creditHeader">Programming:</div>
+									<div class="creditName" onmouseover="NatfurBio(true);" onmouseout="NatfurBio(false);">Nathan Furtwangler</div>
+									<div class="creditName">Justin Rogers</div>
+								</div>
+								<div class="creditCategory">
+									<div class="creditHeader">Graphics:</div>
+									<div class="creditName">Justin Rogers</div>
+									<div class="creditName" onmouseover="NatfurBio(true);" onmouseout="NatfurBio(false);">Nathan Furtwangler</div>
+								</div>
+								<div class="creditCategory">
+									<div class="creditHeader">Audio:</div>
+									<div class="creditName">Justin Rogers</div>
+									<div class="creditName" onmouseover="NatfurBio(true);" onmouseout="NatfurBio(false);">Nathan Furtwangler</div>
+								</div>
+								<div class="creditCategory">
+									<div class="creditHeader">Internet Explorer Features:</div>
+									<div class="creditName" onmouseover="NatfurBio(true);" onmouseout="NatfurBio(false);">Nathan Furtwangler</div>
+									<div class="creditName">Justin Rogers</div>
+								</div>
+							</td>
+							<td width="40%">&nbsp;</td>
+					</table>
+				</div>
+			</div>
+			<div id="popupUI">
+				<div class="popupWindow" id="gameOverPopup">
+					<div class="popupWindowFrame">
+						<div class="popupTitle">Game Over!</div>
+						<div class="popupButton popupButtonOk">Submit</div>
+						<div class="popupButton popupButtonCancel">Skip</div>
+					</div>
+				</div>
+			</div>
+			<div id="soundManager">
+				<div id="audioSingles">
+					<audio id="buttonPlay" src="soundfx/menu_button_play.mp3" preload="auto"></audio>
+					<audio id="buttonSettings" src="soundfx/menu_button_settings.mp3" preload="auto"></audio>
+					<audio id="buttonCredits" src="soundfx/menu_button_credits.mp3" preload="auto"></audio>
+					<audio id="buttonMainMenu" src="soundfx/menu_button_back.mp3" preload="auto"></audio>
+				</div>
+				<div id="audioInstances">
+					<audio id="trashLater" src="soundfx/trash_later.mp3" preload="auto"></audio>
+					<audio id="trashPaycheck" src="soundfx/trash_paycheck.mp3" preload="auto"></audio>
+
+					<audio id="cashRegister" src="soundfx/chaching.mp3" preload="auto"></audio>
+
+					<audio id="gameOverNormal" src="soundfx/loser.mp3" preload="auto"></audio>
+
+					<audio id="customerAnnoyed" src="soundfx/annoyed.mp3" preload="auto"></audio>
+					<audio id="customerAngry" src="soundfx/angry.mp3" preload="auto"></audio>
+					<audio id="customerWalkOut" src="soundfx/leaving.mp3" preload="auto"></audio>
+
+					<audio id="burgerIngredient" src="soundfx/pop.mp3" preload="auto"></audio>
+					<audio id="burgerPatty" src="soundfx/sizzle.mp3" preload="auto"></audio>
+					<audio id="burgerBadIngredient" src="soundfx/badingredient.mp3" preload="auto"></audio>
+
+					<audio id="natfurBio" src="soundfx/natfurBio.mp3" preload="auto"></audio>
+
+					<!-- Levels -->
+					<audio id="level1" src="soundfx/levels/level_justburgers.mp3" preload="auto"></audio>
+					<audio id="level2" src="soundfx/levels/level_bigcheese.mp3" preload="auto"></audio>
+					<audio id="level3" src="soundfx/levels/level_onthehouse.mp3" preload="auto"></audio>
+					<audio id="level4" src="soundfx/levels/level_double.mp3" preload="auto"></audio>
+					<audio id="level5" src="soundfx/levels/level_macdaddy.mp3" preload="auto"></audio>
+					<audio id="level6" src="soundfx/levels/level_trainingwheels.mp3" preload="auto"></audio>
+					<audio id="level7" src="soundfx/levels/level_yourway.mp3" preload="auto"></audio>
+
+					<!-- Cheats -->
+					<audio id="konami" src="soundfx/konami_code.mp3" preload="auto"></audio>
+					<audio id="loser" src="soundfx/loser.mp3" preload="auto"></audio>
+				</div>
+			</div>
+		</div>
+    </body>
+</html>
