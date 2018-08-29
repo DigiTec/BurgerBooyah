@@ -1,6 +1,7 @@
 /* Global game settings */
 * {
   -ms-touch-action: none;
+  touch-action: none;
 }
 
 html {
@@ -27,6 +28,7 @@ body {
   height: 768px;
 
   -ms-transform-origin: 0px 0px;
+  transform-origin: 0px 0px;
 
   transform: scale(0.23);
   -webkit-transform: scale(0.23);
@@ -155,9 +157,6 @@ body {
   display: inline-block;
 }
 
-.creditColumn {
-}
-
 .settingsCategory,
 .creditCategory {
   background-color: white;
@@ -192,8 +191,6 @@ body {
 /* Start Screen */
 #startScreen {
   background-color: white;
-}
-#SplashImg {
 }
 
 #menuContainer {
